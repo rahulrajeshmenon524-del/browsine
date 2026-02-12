@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Queue Jump – Virtual Canteen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ========== GLOBAL ========== */
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+body{
+    margin:0;
+    background:linear-gradient(135deg,#eafff1,#f4f6f8);
+}
+h1,h2,h3{
+    color:#1e7f43;
+}
+section{
+    padding:60px 25px;
+}
+
+/* ========== NAVBAR ========== */
+nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:#1e7f43;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 30px;
+}
+nav h2{
+    color:white;
+    margin:0;
+}
+nav a{
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+}
+nav a:hover{
+    text-decoration:underline;
+}
+
+/* ========== HERO ========== */
+.hero{
+    text-align:center;
+    padding:100px 20px;
+}
+.hero h1{
+    font-size:3rem;
+}
+.hero p{
+    max-width:600px;
+    margin:auto;
+    font-size:1.2rem;
+}
+
+/* ========== BUTTONS (HOVER + CLICK) ========== */
+button{
+    background:linear-gradient(135deg,#1e7f43,#2ecc71);
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:30px;
+    cursor:pointer;
+    font-weight:600;
+    transition:all 0.3s ease;
+    box-shadow:0 8px 20px rgba(30,127,67,0.3);
+}
+button:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:0 14px 30px rgba(30,127,67,0.45);
+}
+button:active{
+    transform:scale(0.95);
+}
+
+/* ========== HOW IT WORKS ========== */
+.steps{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:25px;
+}
+.step{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* ========== MENU ========== */
+.category-title{
+    text-align:center;
+    font-size:1.8rem;
+    margin-top:60px;
+}
+.menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-top:30px;
+}
+.food{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    text-align:center;
+    box-shadow:0 12px 30px rgba(0,0,0,0.12);
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+}
+.food:hover{
+    transform:translateY(-10px) scale(1.02);
+    box-shadow:0 18px 40px rgba(0,0,0,0.18);
+}
+.food img{
+    width:100%;
+    height:150px;
+    object-fit:cover;
+    border-radius:12px;
+}
+.price{
+    font-weight:bold;
+    margin:10px 0;
+}
+
+/* ========== CART ========== */
+#cart{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    max-width:600px;
+    margin:auto;
+    box-shadow:0 12px 30px rgba(0,0,0,0.1);
+}
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+.cart-item button{
+    padding:5px 12px;
+    border-radius:50%;
+}
+
+/* ========== TOKEN ========== */
+#tokenBox{
+    display:none;
+    background:#eafff1;
+    padding:25px;
+    border-radius:15px;
+    margin-top:25px;
+    text-align:center;
+}
+
+/* ========== FOOTER ========== */
+footer{
+    background:#1e7f43;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <h2>Queue Jump</h2>
+    <div>
+        <a href="#home">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#cartSection">Cart</a>
+        <a href="#about">About</a>
+    </div>
+</nav>
+
+<section class="hero" id="home">
+    <h1>Skip the Queue 🚀</h1>
+    <p>Order your canteen food digitally and collect without waiting.</p><br>
+    <button onclick="scrollToMenu()">Order Now</button>
+</section>
+
+<section>
+    <h2 style="text-align:center;">How It Works</h2>
+    <div class="steps">
+        <div class="step">📱 Login</div>
+        <div class="step">🍽 Choose Food</div>
+        <div class="step">💳 Pay Online</div>
+        <div class="step">🎫 Get Token</div>
+        <div class="step">🏃 Collect</div>
+    </div>
+</section>
+
+<section id="menu">
+    <h2 class="category-title">🥗 Vegetarian</h2>
+    <div class="menu">
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?dosa">
+            <h3>Dosa</h3>
+            <p class="price">₹40</p>
+            <button onclick="addToCart('Dosa',40)">Add</button>
+        </div>
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?chapathi">
+            <h3>Chapathi</h3>
+            <p class="price">₹35</p>
+            <button onclick="addToCart('Chapathi',35)">Add</button>
+        </div>
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?parotta">
+            <h3>Parotta</h3>
+            <p class="price">₹45</p>
+            <button onclick="addToCart('Parotta',45)">Add</button>
+        </div>
+    </div>
+
+    <h2 class="category-title">🍗 Non-Veg</h2>
+    <div class="menu">
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?chicken-roast">
+            <h3>Chicken Roast</h3>
+            <p class="price">₹120</p>
+            <button onclick="addToCart('Chicken Roast',120)">Add</button>
+        </div>
+    </div>
+
+    <h2 class="category-title">☕ Beverages</h2>
+    <div class="menu">
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?tea">
+            <h3>Tea</h3>
+            <p class="price">₹15</p>
+            <button onclick="addToCart('Tea',15)">Add</button>
+        </div>
+        <div class="food">
+            <img src="https://source.unsplash.com/400x300/?coffee">
+            <h3>Coffee</h3>
+            <p class="price">₹20</p>
+            <button onclick="addToCart('Coffee',20)">Add</button>
+        </div>
+    </div>
+</section>
+
+<section id="cartSection">
+    <h2 style="text-align:center;">🛒 Your Cart</h2>
+    <div id="cart">
+        <div id="cartItems"></div>
+        <h3>Total: ₹<span id="total">0</span></h3>
+        <button onclick="placeOrder()">Place Order</button>
+
+        <div id="tokenBox">
+            <h3>🎫 Token: <span id="token"></span></h3>
+            <p>Status: <span id="status">Preparing</span></p>
+            <p>ETA: 10 minutes</p>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <h2 style="text-align:center;">About</h2>
+    <p style="text-align:center;max-width:700px;margin:auto;">
+        Queue Jump is a smart virtual canteen token system to save student time
+        and reduce crowding.
+    </p>
+</section>
+
+<footer>
+    Queue Jump © 2026 | College Project
+</footer>
+
+<script type="module">
+/* ================= FIREBASE ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBKWa5wYubngLara1xEe43nrniD1HgRVm0",
+  authDomain: "queuejump-d2417.firebaseapp.com",
+  databaseURL: "https://queuejump-d2417-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "queuejump-d2417",
+  storageBucket: "queuejump-d2417.firebasestorage.app",
+  messagingSenderId: "637502762475",
+  appId: "1:637502762475:web:87a11fcf015a7186707dae"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* ================= CART ================= */
+let cart = [];
+let total = 0;
+let currentToken = "";
+
+window.addToCart = function(item, price){
+    const found = cart.find(c => c.item === item);
+    if(found) found.qty++;
+    else cart.push({item,price,qty:1});
+    renderCart();
+};
+
+window.changeQty = function(i, d){
+    cart[i].qty += d;
+    if(cart[i].qty <= 0) cart.splice(i,1);
+    renderCart();
+};
+
+function renderCart(){
+    total = 0;
+    const el = document.getElementById("cartItems");
+    el.innerHTML="";
+    cart.forEach((c,i)=>{
+        total += c.price*c.qty;
+        el.innerHTML += `
+        <div class="cart-item">
+            <span>${c.item}</span>
+            <span>
+                <button onclick="changeQty(${i},-1)">−</button>
+                ${c.qty}
+                <button onclick="changeQty(${i},1)">+</button>
+            </span>
+        </div>`;
+    });
+    document.getElementById("total").innerText = total;
+}
+
+window.placeOrder = function(){
+    if(cart.length===0){ alert("Cart is empty"); return; }
+    currentToken = "QJ-"+Date.now().toString().slice(-5);
+
+    /* 🔔 CANTEEN NOTIFICATION PATH UNCHANGED */
+    set(ref(db,"orders/"+currentToken),{
+        items:cart,
+        total:total,
+        status:"Preparing",
+        time:Date.now()
+    });
+
+    document.getElementById("token").innerText=currentToken;
+    document.getElementById("tokenBox").style.display="block";
+
+    onValue(ref(db,"orders/"+currentToken+"/status"),snap=>{
+        document.getElementById("status").innerText=snap.val();
+        if(snap.val()==="Ready") alert("🔔 Order Ready!");
+    });
+
+    cart=[];
+    renderCart();
+};
+
+window.scrollToMenu = ()=>document.getElementById("menu").scrollIntoView({behavior:"smooth"});
+</script>
+
+</body>
+</html>
